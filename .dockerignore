@@ -1,0 +1,9 @@
+.idea
+.git
+
+**/.venv
+
+**/*.egg-info
+**/temp
+**/_local
+**/__pycache__
