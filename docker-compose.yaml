@@ -13,7 +13,7 @@ volumes:
 services:
   teamcity-backup:
     build:
-      dockerfile: ./teamcity_backup/Dockerfile
+      dockerfile: ./Dockerfile
       context: ./
     restart: "no"
     volumes:

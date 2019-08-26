@@ -12,4 +12,4 @@ scrape_configs:
   - job_name: teamcity-backup
     metrics_path: /metrics
     static_configs:
-      - targets: ['teamcity-backup:8888']
+      - targets: ['teamcity-backup:8765']

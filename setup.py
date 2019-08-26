@@ -60,7 +60,7 @@ setuptools.setup(
         'minio>=3.0.1',
     ],
 
-    packages=setuptools.find_packages(exclude=('tests', )),
+    packages=setuptools.find_packages(include=('teamcity_backup', )),
 
     classifiers=['Private :: Do Not Upload'],
 

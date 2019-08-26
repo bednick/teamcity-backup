@@ -1,10 +1,10 @@
 FROM python:3.7-stretch AS build
 
-COPY teamcity_backup/requirements.txt /build/requirements.txt
+COPY requirements.txt /build/requirements.txt
 
 RUN mkdir -p /build/wheels/ && pip wheel -r /build/requirements.txt --wheel-dir /build/wheels
 
-COPY teamcity_backup /build/src/teamcity_backup
+COPY . /build/src/teamcity_backup
 RUN pip wheel --wheel-dir=/build/wheels --no-index --find-links=/build/wheels /build/src/teamcity_backup
 
 
