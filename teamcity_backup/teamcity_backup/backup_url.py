@@ -5,6 +5,7 @@
 import requests
 
 from requests.auth import HTTPBasicAuth
+from prometheus_client import Counter, Summary
 from requests.exceptions import ConnectTimeout, ReadTimeout, RequestException
 
 from .settings import (
@@ -16,8 +17,11 @@ from .settings import (
 
 __all__ = [
     'CreateTeamcityBackupError',
-    'create_teamcity_backup',
+    'teamcity_backup_url',
 ]
+
+failure = Counter('backup_url_failures', 'Count backup-url failures')
+step = Summary('teamcity_backup_url', 'Time teamcity_backup_url')
 
 TEAMCITY_BACKUP_URL = f'http://{TEAMCITY_HOST}:{TEAMCITY_PORT}/httpAuth/app/rest/server/backup'
 TEAMCITY_BACKUP_PARAMS = {
@@ -36,7 +40,9 @@ class CreateTeamcityBackupError(Exception):
     pass
 
 
-def create_teamcity_backup() -> str:
+@step.time()
+@failure.count_exceptions()
+def teamcity_backup_url() -> str:
     try:
         response = requests.post(
             TEAMCITY_BACKUP_URL,

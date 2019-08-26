@@ -8,6 +8,9 @@ from envparse import env
 
 BACKUP_PERIODICITY = max(1, env.int('BACKUP_PERIODICITY', default=12*60))  # minutes
 
+SERVICE_PORT = env.int('SERVICE_PORT', default=8765)
+SERVICE_LOG_LEVEL = env.str('SERVICE_LOG_LEVEL', default='INFO')
+
 TEAMCITY_USER = env.str('TEAMCITY_USER')
 TEAMCITY_PASS = env.str('TEAMCITY_PASS')
 TEAMCITY_DATADIR = env.str('TEAMCITY_DATADIR', default='/data/teamcity_server/datadir')

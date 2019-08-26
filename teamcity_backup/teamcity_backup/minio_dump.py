@@ -9,6 +9,7 @@ import logging
 from minio import Minio
 from typing import Optional
 from datetime import datetime
+from prometheus_client import Counter, Info, Summary
 from minio.error import ResponseError, BucketAlreadyOwnedByYou, BucketAlreadyExists
 
 from .settings import (
@@ -23,6 +24,10 @@ __all__ = [
 
 logger = logging.getLogger(__package__)
 
+failure = Counter('minio_dump_failures', 'Count minio-dump failures')
+info = Info('minio_dump', 'Minio backup information')
+wait = Summary('wait_part_file', 'Time wait *.part file')
+step = Summary('save_data_to_minio', 'Time save_data_to_minio')
 
 client = Minio(MINIO_ENDPOINT, access_key=MINIO_ACCESS_KEY, secret_key=MINIO_SECRET_KEY, secure=MINIO_SECURE)
 
@@ -31,6 +36,7 @@ class DumpBackupError(Exception):
     pass
 
 
+@wait.time()
 def wait_part(filename: str, max_timeout: Optional[int]) -> bool:
     start = datetime.now()
     while not os.path.isfile(filename) and os.path.isfile(f'{filename}.part'):
@@ -41,6 +47,8 @@ def wait_part(filename: str, max_timeout: Optional[int]) -> bool:
     return os.path.isfile(filename)
 
 
+@step.time()
+@failure.count_exceptions()
 def save_data_to_minio(name: str):
     try:
         if not client.bucket_exists(MINIO_BUCKET):
@@ -62,9 +70,10 @@ def save_data_to_minio(name: str):
         logger.info(f'WAIT PART {TEAMCITY_PART_TIMEOUT}: {filename}')
 
         if not wait_part(filename, TEAMCITY_PART_TIMEOUT):
-            raise DumpBackupError(f'Teamcity part timeout {TEAMCITY_PART_TIMEOUT} seconds')
+            raise DumpBackupError(f'Teamcity part timeout {TEAMCITY_PART_TIMEOUT} seconds, file {filename} not found')
 
         logger.info(f'DUMP bucket: {MINIO_BUCKET}, name: {name}, filename: {filename}')
+        info.info({'backup_bucket': MINIO_BUCKET, 'backup_name': name, 'backup_filename': filename})
         try:
             client.fput_object(MINIO_BUCKET, name, filename, content_type='application/zip')
         except ResponseError as e:
