@@ -17,7 +17,7 @@ services:
       context: ./
     restart: "no"
     volumes:
-      - teamcity_data:${TEAMCITY_DATADIR?}
+      - teamcity_data:${TEAMCITY_DATADIR:-/data/teamcity_server/datadir}
     expose:
       - ${SERVICE_PORT:-8765}
     ports:
@@ -31,7 +31,7 @@ services:
     image: jetbrains/teamcity-server:2019.1.2-linux
     restart: "no"
     volumes:
-      - teamcity_data:${TEAMCITY_DATADIR?}
+      - teamcity_data:${TEAMCITY_DATADIR:-/data/teamcity_server/datadir}
       # - ./teamcity/logs:/opt/teamcity/logs
     expose:
       - 8111
