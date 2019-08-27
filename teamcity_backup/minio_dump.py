@@ -70,7 +70,10 @@ def save_data_to_minio(name: str):
         logger.info(f'WAIT PART {TEAMCITY_PART_TIMEOUT}: {filename}')
 
         if not wait_part(filename, TEAMCITY_PART_TIMEOUT):
-            raise DumpBackupError(f'Teamcity part timeout {TEAMCITY_PART_TIMEOUT} seconds, file {filename} not found')
+            raise DumpBackupError(
+                f'Teamcity part timeout {TEAMCITY_PART_TIMEOUT} seconds, file {filename} not found.'
+                f' All backups: {os.listdir(directory)}'
+            )
 
         logger.info(f'DUMP bucket: {MINIO_BUCKET}, name: {name}, filename: {filename}')
         info.info({'backup_bucket': MINIO_BUCKET, 'backup_name': name, 'backup_filename': filename})

@@ -14,7 +14,7 @@ SERVICE_LOG_LEVEL = env.str('SERVICE_LOG_LEVEL', default='INFO')
 TEAMCITY_USER = env.str('TEAMCITY_USER')
 TEAMCITY_PASS = env.str('TEAMCITY_PASS')
 TEAMCITY_DATADIR = env.str('TEAMCITY_DATADIR', default='/data/teamcity_server/datadir')
-TEAMCITY_PART_TIMEOUT = max(0, env.int('TEAMCITY_PART_TIMEOUT', default=60))
+TEAMCITY_PART_TIMEOUT = max(0, env.int('TEAMCITY_PART_TIMEOUT', default=60*60))  # seconds
 
 # ./app/rest/application.wadl
 BACKUP_FILENAME = env.str('BACKUP_FILENAME', default='auto-backup')
