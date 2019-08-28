@@ -32,6 +32,8 @@
 | MINIO_SECRET_KEY                  | string  | True     |         | Секретный ключ длиной не менее 8 символов |
 | MINIO_SECURE                      | boolean | False    | False   | Будет ли использоваться https:// при работе с minio |
 | MINIO_BUCKET                      | string  | False    | teamcity-backup | Minio bucket в котором будут сохраняться backup'ы teamcity |
+| GF_SECURITY_ADMIN_USER            | string  | False    | admin   | Логин админ пользователя grafana |
+| GF_SECURITY_ADMIN_PASSWORD        | string  | False    | admin   | Пароль админ пользователя grafana |
 
 ## Развертывание
 Сервис описан в виде python-пакета. Для запуска необходимо:

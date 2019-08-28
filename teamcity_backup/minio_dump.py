@@ -42,7 +42,7 @@ def wait_part(filename: str, max_timeout: Optional[int]) -> bool:
     while not os.path.isfile(filename) and os.path.isfile(f'{filename}.part'):
         if max_timeout and (datetime.now() - start).total_seconds() > 60*max_timeout:
             break
-        time.sleep(5)
+        time.sleep(30)
 
     return os.path.isfile(filename)
 
