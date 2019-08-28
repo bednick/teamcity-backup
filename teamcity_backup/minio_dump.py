@@ -40,7 +40,7 @@ class DumpBackupError(Exception):
 def wait_part(filename: str, max_timeout: Optional[int]) -> bool:
     start = datetime.now()
     while not os.path.isfile(filename) and os.path.isfile(f'{filename}.part'):
-        if max_timeout and (datetime.now() - start).total_seconds() > max_timeout:
+        if max_timeout and (datetime.now() - start).total_seconds() > 60*max_timeout:
             break
         time.sleep(5)
 
@@ -71,7 +71,7 @@ def save_data_to_minio(name: str):
 
         if not wait_part(filename, TEAMCITY_PART_TIMEOUT):
             raise DumpBackupError(
-                f'Teamcity part timeout {TEAMCITY_PART_TIMEOUT} seconds, file {filename} not found.'
+                f'Teamcity part timeout {TEAMCITY_PART_TIMEOUT} minutes, file {filename} not found.'
                 f' All backups: {os.listdir(directory)}'
             )
 
