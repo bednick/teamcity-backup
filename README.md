@@ -16,7 +16,7 @@
 | TEAMCITY_USER                     | string  | True     |         | Логин пользователя teamcity с помощью которого будет происходить создание backup'ов |
 | TEAMCITY_PASS                     | string  | True     |         | Пароль пользователя teamcity с помощью которого будет происходить создание backup'ов  |
 | TEAMCITY_DATADIR                  | string  | False    | /data/teamcity_server/datadir | Место хранения данных teamcity. <br/>Директория хранения backup'ов: `${TEAMCITY_DATADIR}/backup` |
-| TEAMCITY_PART_TIMEOUT             | integer | False    | 3600    | Время ожидания создания файла `backup_name.zip` из `backup_name.zip.part` (в минутах). Если значение равно 0, то время ожидания неограниченно.<br/>**ВАЖНО**: значение 0 является нерекомендуемым для prod использования, так-как может вызвать бесконечное зависание! |
+| TEAMCITY_PART_TIMEOUT             | integer | False    | 60      | Время ожидания создания файла `backup_name.zip` из `backup_name.zip.part` (в минутах). Если значение равно 0, то время ожидания неограниченно.<br/>**ВАЖНО**: значение 0 является нерекомендуемым для prod использования, так-как может вызвать бесконечное зависание! |
 | BACKUP_FILENAME                   | string  | False    | auto-backup    | Аргумент [fileName](https://www.jetbrains.com/help/teamcity/rest-api.html#RESTAPI-DataBackup) |
 | BACKUP_ADD_TIMESTAMP              | boolean | False    | True    | Аргумент [addTimestamp](https://www.jetbrains.com/help/teamcity/rest-api.html#RESTAPI-DataBackup) |
 | BACKUP_INCLUDE_CONFIGS            | boolean | False    | True    | Аргумент [includeConfigs](https://www.jetbrains.com/help/teamcity/rest-api.html#RESTAPI-DataBackup) |
@@ -61,6 +61,7 @@ cat example.env > .env
 для корректной работы сервисов через docker-compose, необходимо чтобы часть переменные окружения были заданны
 следующими значениями:
 ```.env
+SERVICE_PORT=8765
 TEAMCITY_HOST=teamcity-server
 MINIO_ENDPOINT=minio:9000
 ```
