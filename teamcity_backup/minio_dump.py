@@ -39,7 +39,8 @@ class DumpBackupError(Exception):
 @wait.time()
 def wait_part(filename: str, max_timeout: Optional[int]) -> bool:
     start = datetime.now()
-    while not os.path.isfile(filename) and os.path.isfile(f'{filename}.part'):
+    # while not os.path.isfile(filename) and os.path.isfile(f'{filename}.part'):
+    while not os.path.isfile(filename):
         if max_timeout and (datetime.now() - start).total_seconds() > 60*max_timeout:
             break
         time.sleep(30)
