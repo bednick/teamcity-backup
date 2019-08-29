@@ -4,6 +4,7 @@
 # Решение
 - teamcity_backup — содержит исходный код сервиса. 
 - prometheus — содержит настройки [Prometheus](https://prometheus.io/docs/prometheus/latest/configuration/configuration/).
+- grafana — содержит настройки [Grafana](https://grafana.com/docs/).
 
 ## Переменные окружения
 Настройка сервисов происходит по средством определения переменных окружения.
