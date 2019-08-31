@@ -9,8 +9,7 @@ import schedule
 from prometheus_client import start_http_server, Counter, Gauge
 
 from teamcity_backup.settings import BACKUP_PERIODICITY, SERVICE_PORT, SERVICE_LOG_LEVEL
-from teamcity_backup.backup_url import teamcity_backup_url, CreateTeamcityBackupError
-from teamcity_backup.minio_dump import save_data_to_minio, DumpBackupError
+from teamcity_backup.backup import CreateTeamcityBackupError, DumpBackupError, teamcity_backup_url, save_data_to_minio
 
 logger = logging.getLogger(__package__)
 
