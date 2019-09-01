@@ -14,7 +14,7 @@ services:
   teamcity-backup:
     build:
       dockerfile: ./Dockerfile
-      context: ./
+      context: ./teamcity_backup/
     restart: "no"
     volumes:
       - teamcity_data:${TEAMCITY_DATADIR:-/data/teamcity_server/datadir}
