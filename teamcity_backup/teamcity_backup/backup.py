@@ -13,6 +13,8 @@ from requests.auth import HTTPBasicAuth
 from prometheus_client import Counter, Summary
 from requests.exceptions import ConnectTimeout, ReadTimeout, RequestException
 
+from .utils import log_step
+
 __all__ = [
     'CreateTeamcityBackupError',
     'TeamcityBackupTimeout',
@@ -120,6 +122,7 @@ class TeamcityBackupURL(IBackupFile):
 
         return os.path.isfile(filename)
 
+    @log_step(name='create teamcity backup file', logger=logger)
     def create_backup(self) -> str:
         backup_name = self._send_request()
 

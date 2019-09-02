@@ -23,13 +23,8 @@ failure = Counter('backup_task_failures', 'Count backup failures')
 def task(backup: IBackupFile, storage: IStorageFile):
     try:
         with failure.count_exceptions():
-            logger.info(f'Start teamcity backup...')
             filename = backup.create_backup()
-            logger.info(f'Created backup: {filename}')
-
-            logger.info('Start save data to minio...')
             storage.save_file(filename)
-            logger.info('Saved data to minio')
     except CreateTeamcityBackupError as e:
         logger.exception(f'Error create backup: {e}', exc_info=e)
     except DumpBackupError as e:

@@ -10,6 +10,7 @@ from abc import ABCMeta, abstractmethod
 from prometheus_client import Info, Counter, Summary
 from minio.error import ResponseError, BucketAlreadyOwnedByYou, BucketAlreadyExists
 
+from .utils import log_step
 
 __all__ = [
     'DumpBackupError',
@@ -53,6 +54,7 @@ class MinioStorage(IStorageFile):
 
     @step_minio.time()
     @failure_minio.count_exceptions()
+    @log_step(name='save data to minio', logger=logger)
     def save_file(self, filename):
         try:
             if not self.client.bucket_exists(self.bucket):
