@@ -77,3 +77,16 @@ MINIO_ENDPOINT=minio:9000
 2. Произвести регистрацию пользователя с:
     - Именем пользоваля равным переменной окружения `TEAMCITY_USER`
     - Паролем равным переменной окружения `TEAMCITY_PASS`
+
+## Тестирование
+
+### prometheus
+Для проверки алертов prometheus используется [UNIT TESTING FOR RULES](https://prometheus.io/docs/prometheus/latest/configuration/unit_testing_rules/).
+Файл prometheus/alert.rules.test.yml. Для запуска тестов необходимо выполнить следующую команду:
+```bash
+docker run -v $PROJECT/prometheus:/tmp --entrypoint "/bin/promtool" prom/prometheus:v2.12.0 test rules /tmp/alert.rules.test.yml
+```
+Где `$PROJECT` Полный путь до проекта. Например:
+```bash
+docker run -v d:/teamcity-backup/prometheus:/tmp --entrypoint "/bin/promtool" prom/prometheus:v2.12.0 test rules /tmp/alert.rules.test.yml
+```

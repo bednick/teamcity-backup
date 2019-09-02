@@ -1,0 +1,40 @@
+# https://prometheus.io/docs/prometheus/latest/configuration/unit_testing_rules/
+
+rule_files:
+  - alert.rules
+
+evaluation_interval: 1m
+
+tests:
+  - interval: 1m
+    input_series:
+      - series: 'up{job="prometheus", instance="localhost:9090"}'
+        values: '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0'
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: InstanceDown
+        exp_alerts:
+          # Alert 1.
+          - exp_labels:
+              severity: page
+              instance: localhost:9090
+              job: prometheus
+            exp_annotations:
+              summary: "Instance localhost:9090 down"
+              description: "localhost:9090 of job prometheus has been down for more than 5 minutes."
+
+  - interval: 20m
+    input_series:
+      - series: 'backup_task_failures_total{job="teamcity-backup", instance="localhost:8765"}'
+        # values: '1+1x10'
+        values: '0 0 0 1 1 1'
+    alert_rule_test:
+      - eval_time: 1h
+        alertname: ErrorBackupCreate
+        exp_alerts:
+          - exp_labels:
+              instance: localhost:8765
+              job: teamcity-backup
+            exp_annotations:
+              summary: "Error create backup"
+              description: "Error create backup (url-backup or minio)"

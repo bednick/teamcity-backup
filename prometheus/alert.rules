@@ -12,7 +12,7 @@ groups:
           description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 5 minutes."
 
       - alert: ErrorBackupCreate
-        expr: increase(backup_task_failures_total[1h]) > 1
+        expr: increase(backup_task_failures_total[1h]) > 0
         annotations:
           summary: "Error create backup"
           description: "Error create backup (url-backup or minio)"
