@@ -12,7 +12,7 @@
 | Name                              | Type    | Required | Default | Description |
 |:---------------------------------:|:-------:|:--------:|:-------:|:------------|
 | BACKUP_PERIODICITY                | integer | False    | 720     | Переодичность создания backup (в минутах) |
-| SERVICE_PORT                      | integer | False    | 8765    | Порт на котором развернут teamcity_backup сервис. <br/>Метрики доступны на `SERVICE_HOST:${SERVICE_PORT}/metrics` |
+| **SERVICE_PORT**                  | integer | False    | 8765    | Порт на котором развернут teamcity_backup сервис. <br/>Метрики доступны на `SERVICE_HOST:${SERVICE_PORT}/metrics` |
 | SERVICE_LOG_LEVEL                 | string  | False    | INFO    | Уровень логирования сервиса teamcity_backup |
 | TEAMCITY_USER                     | string  | True     |         | Логин пользователя teamcity с помощью которого будет происходить создание backup'ов |
 | TEAMCITY_PASS                     | string  | True     |         | Пароль пользователя teamcity с помощью которого будет происходить создание backup'ов  |
@@ -26,15 +26,19 @@
 | BACKUP_INCLUDE_PERSONAL_CHANGES   | boolean | False    | True    | Аргумент [includePersonalChanges](https://www.jetbrains.com/help/teamcity/rest-api.html#RESTAPI-DataBackup) |
 | BACKUP_RUNNING_BUILDS             | boolean | False    | False   | Аргумент [includeRunningBuilds](https://www.jetbrains.com/help/teamcity/rest-api.html#RESTAPI-DataBackup) |
 | BACKUP_INCLUDE_SUPPLIMENTARY_DATA | boolean | False    | False   | Аргумент [includeSupplimentaryData](https://www.jetbrains.com/help/teamcity/rest-api.html#RESTAPI-DataBackup) |
-| TEAMCITY_HOST                     | string  | True     |         | Хост teamcity сервера |
-| TEAMCITY_PORT                     | integer | False    | 8111    | Порт на котором развернут teamcity сервера |
-| MINIO_ENDPOINT                    | string  | True     |         | <minio_host>:<minio_port> (без указания http://, https://) |
+| **TEAMCITY_HOST**                 | string  | True     | teamcity-server | Хост teamcity сервера |
+| **TEAMCITY_PORT**                 | integer | False    | 8111    | Порт на котором развернут teamcity сервера |
+| **MINIO_ENDPOINT**                | string  | True     | minio:9000 | <minio_host>:<minio_port> (без указания http://, https://) |
 | MINIO_ACCESS_KEY                  | string  | True     |         | Ключ доступа длиной не менее 3 символов |
 | MINIO_SECRET_KEY                  | string  | True     |         | Секретный ключ длиной не менее 8 символов |
 | MINIO_SECURE                      | boolean | False    | False   | Будет ли использоваться https:// при работе с minio |
 | MINIO_BUCKET                      | string  | False    | teamcity-backup | Minio bucket в котором будут сохраняться backup'ы teamcity |
 | GF_SECURITY_ADMIN_USER            | string  | False    | admin   | Логин админ пользователя grafana |
 | GF_SECURITY_ADMIN_PASSWORD        | string  | False    | admin   | Пароль админ пользователя grafana |
+
+**ВАЖНО**: 
+Выделенные переменные окружения определены средствами `docker-compose.yaml` и не могут быть изменены с помощью `.env`
+файла. Это необходимо для корректной работы сервисов.
 
 ## Развертывание
 Сервис описан в виде python-пакета. Для запуска необходимо:
@@ -51,22 +55,17 @@
 ## Развертывание по средствам docker (docker-compose)
 Развертывание предполагается через docker-compose.
 Для этого необходимо создать файл с именем `.env` содержащий определения всех обязательных перемен окружения.
-В корне проекта лежит файл пример `example.env`.
+В корне проекта лежит файл необходимый для минимальной настройки сервисов `start.env`.
+Необходимо выполнить:
+```bash
+cat start.env > .env
+```
+И заполнить значение переменных с зависимости с ограничениями описанными выше 
 
-Для разработки/тестирования можно использовать настройки из `example.env`:
+В корне проекта также лежит файл пример `example.env`.
+Для разработки/тестирования можно использовать его:
 ```bash
 cat example.env > .env
-```
-
-**ВАЖНО**:
-В силу того, что в настройках prometheus
-[нельзя использовать переменные окружения](https://github.com/prometheus/alertmanager/issues/504),
-для корректной работы сервисов через docker-compose, необходимо чтобы часть переменные окружения были заданны
-следующими значениями:
-```.env
-SERVICE_PORT=8765
-TEAMCITY_HOST=teamcity-server
-MINIO_ENDPOINT=minio:9000
 ```
 
 ### Первичная настройка

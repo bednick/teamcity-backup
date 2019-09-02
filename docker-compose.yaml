@@ -19,9 +19,15 @@ services:
     volumes:
       - teamcity_data:${TEAMCITY_DATADIR:-/data/teamcity_server/datadir}
     expose:
-      - ${SERVICE_PORT:-8765}
+      - 8765
     ports:
-      - ${SERVICE_PORT:-8765}:${SERVICE_PORT:-8765}
+      - 8765:8765
+    environment:
+      # priority than .env
+      - SERVICE_PORT=8765
+      - MINIO_ENDPOINT=minio:9000
+      - TEAMCITY_HOST=teamcity-server
+      - TEAMCITY_PORT=8111
     env_file:
       - .env
     networks:
