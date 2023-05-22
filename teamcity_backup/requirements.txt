@@ -1,4 +1,4 @@
-requests==2.21.0
+requests==2.31.0
 prometheus_client==0.7.1
 schedule==0.6.0
 envparse==0.2.0
